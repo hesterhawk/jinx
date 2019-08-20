@@ -1,1 +1,1 @@
-# jinx
+ROP gadgets finder for GDB
