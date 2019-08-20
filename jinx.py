@@ -23,10 +23,44 @@ class Engine:
 class MipsTail(Engine):
 
   def validate(self, data):
-    print(self.func_name)
-    print(data)
 
-    return True
+    r_move = []
+    r_lw = []
+    r_j = ''
+
+    for item in data:
+
+      if len(item) >= 4:
+
+        if len(item) < 4 or item[2] == 'b':
+          r_move = []
+          r_lw = []
+          r_j = ''
+
+        opcode = ' '.join(item[2:])
+
+        if item[2] == 'move' and item[3][:3] == 't9,':
+          r_move.append(opcode)
+
+        if item[2] == 'lw' and item[3][:2] == 'ra':
+          r_lw.append(opcode)
+
+        if item[2][:1] == 'j' and len(r_move) > 0 and len(r_lw) > 0:
+
+          if item[3] == 't9' or item[3][:1] == 's':
+            r_j = opcode
+
+    if len(r_move) > 0 and len(r_lw) > 0 and r_j != '':
+
+      print("+" + self.func_name + " found !!!!11111..")
+      print(r_move)
+      print(r_lw)
+      print(r_j)
+      self.data = self.func_name
+
+      return True
+
+    return False
 
 
 # Routing
@@ -93,10 +127,6 @@ class Jinx(gdb.Command):
 
   def run_search(self):
 
-    # temp array for function data
-    #
-    t_data = []
-
     functions = gdb.execute('info functions', to_string=True).splitlines()
 
     for func in functions:
@@ -106,6 +136,10 @@ class Jinx(gdb.Command):
       # validate function name
       #
       if len(func) == 2 and func[0][:2] == '0x':
+
+        # temp array for function data
+        #
+        t_data = []
 
         # init search engine
         self.engine.init(func[1])
@@ -126,7 +160,6 @@ class Jinx(gdb.Command):
         #
         if self.engine.validate(t_data):
           self.to_log( self.engine.dump_data() )
-          quit()
 
 
   def to_log(self, data):
