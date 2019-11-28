@@ -1,8 +1,7 @@
 jinx.py
 =============
 
-Simple ROP gadgets finder for GDB&nbsp;
-Architecture: MIPS(EL)
+Simple ROP gadgets finder for GDB\ Architecture: MIPS(EL)
 
 ### Usage
 
