@@ -19,11 +19,14 @@ class Engine:
   def dump_data(self):
     return self.data
 
-
+# Sniffer
+#
+# jx li a0,3;move t9,s1;jalr t9
+#
 class Sniffer(Engine):
 
   def __init__(self, patterns):
-      self.patterns = patterns
+      self.patterns = pattern.split(";")
 
   def validate(self, data):
 
