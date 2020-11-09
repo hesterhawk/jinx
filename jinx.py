@@ -20,6 +20,39 @@ class Engine:
     return self.data
 
 
+class MipsFuncArgNum(Engine):
+
+  def validate(self, data):
+
+    r_j = []
+    r_a0 = []
+    r_move = []
+
+    for item in data:
+
+    opcode = ' '.join(item[2:])
+
+    if item[2] == 'li' and item[3][:3] == 'a0,':
+      r_a0.append(opcode)
+
+    if len(r_a0) > 0 and item[2] == 'move' and item[3][:5] == 't9,s1':
+      r_move.append(opcode)
+
+    if len(r_a0) > 0 and item[2] == 'jalr' and item[3][:2] == 't9':
+      r_j.append(opcode)
+
+    if len(r_a0) > 0 and len(r_move) > 0 and len(r_j) > 0:
+      print("+" + self.func_name + " found !!!!11111..")
+      print(r_a0)
+      print(r_move)
+      print(r_j)
+      self.data = self.func_name
+
+      return True
+
+    return False
+
+
 class MipsTail(Engine):
 
   def validate(self, data):
@@ -68,7 +101,8 @@ class MipsTail(Engine):
 class Route:
 
   engines = {
-    'mips-tail': MipsTail
+    'mips-tail': MipsTail,
+    'mips-farg-num': MipsFuncArgNum
   }
 
 ### End Routes
