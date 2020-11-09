@@ -20,9 +20,9 @@ class Engine:
     return self.data
 
 
-class Patterns(Engine):
+class Sniffer(Engine):
 
-  def setPatterns(self, patterns):
+  def __init__(self, patterns):
       self.patterns = patterns
 
   def validate(self, data):
@@ -153,16 +153,15 @@ class Jinx(gdb.Command):
 
       self.show_help()
 
-    elif args[0] not in Route.engines:
+    elif args[0] in Route.engines:
 
-      self.engine = Patterns()
-      self.engine.setPatterns(args[0])
-      print("[+] search pattern: {}".format(args[0]))
+      self.engine = Route.engines[args[0]]()
       self.run_search()
 
     else:
 
-      self.engine = Route.engines[args[0]]()
+      self.engine = Sniffer(args[0])
+      print("[+] search pattern: {}".format(args[0]))
       self.run_search()
 
 
