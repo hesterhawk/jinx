@@ -20,32 +20,29 @@ class Engine:
     return self.data
 
 
-class MipsFuncArgNum(Engine):
+class Patterns(Engine):
 
   def validate(self, data):
 
-    r_j = []
-    r_a0 = []
-    r_move = []
+    r = []
 
     for item in data:
 
-    opcode = ' '.join(item[2:])
+      opcode = ' '.join(item[2:])
 
-    if item[2] == 'li' and item[3][:3] == 'a0,':
-      r_a0.append(opcode)
+      for cnt in range(0, len(patterns)):
 
-    if len(r_a0) > 0 and item[2] == 'move' and item[3][:5] == 't9,s1':
-      r_move.append(opcode)
+        if 0 == cnt:
+          if opcode == patterns[cnt]:
+            r.append(patterns[cnt])
+        else:
+          if opcode == patterns[cnt] and patterns[cnt - 1] in r:
+            r.append(patterns[cnt])
 
-    if len(r_a0) > 0 and item[2] == 'jalr' and item[3][:2] == 't9':
-      r_j.append(opcode)
+    if len(r) > 0:
 
-    if len(r_a0) > 0 and len(r_move) > 0 and len(r_j) > 0:
       print("+" + self.func_name + " found !!!!11111..")
-      print(r_a0)
-      print(r_move)
-      print(r_j)
+      print(r)
       self.data = self.func_name
 
       return True
@@ -101,9 +98,11 @@ class MipsTail(Engine):
 class Route:
 
   engines = {
-    'mips-tail': MipsTail,
-    'mips-farg-num': MipsFuncArgNum
+    'mips-tail': MipsTail
   }
+
+  def setPatterns(self, patterns):
+      self.patterns = patterns
 
 ### End Routes
 
@@ -149,9 +148,15 @@ class Jinx(gdb.Command):
 
     args = args.split()
 
-    if [] == args or args[0] not in Route.engines:
+    if [] == args:
 
       self.show_help()
+
+    elif args[0] not in Route.engines:
+
+      self.engine = Patterns()
+      self.setPatterns(args[0])
+      self.run_search()
 
     else:
 
