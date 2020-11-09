@@ -160,8 +160,9 @@ class Jinx(gdb.Command):
 
     else:
 
-      self.engine = Sniffer(args[0])
-      print("[+] search pattern: {}".format(args[0]))
+      args = ' '.join(args)
+      self.engine = Sniffer(args)
+      print("[+] search pattern: `{}`".format(args))
       self.run_search()
 
 
