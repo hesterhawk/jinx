@@ -45,7 +45,7 @@ class Sniffer(Engine):
           if opcode == self.patterns[cnt] and self.patterns[cnt - 1] in r:
             r.append(self.patterns[cnt])
 
-    if len(r) > 0:
+    if len(r) >= len(self.patterns):
 
       print("+" + self.func_name + " found !!!!11111..")
       print(r)
