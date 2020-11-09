@@ -22,6 +22,9 @@ class Engine:
 
 class Patterns(Engine):
 
+  def setPatterns(self, patterns):
+      self.patterns = patterns
+
   def validate(self, data):
 
     r = []
@@ -101,8 +104,6 @@ class Route:
     'mips-tail': MipsTail
   }
 
-  def setPatterns(self, patterns):
-      self.patterns = patterns
 
 ### End Routes
 
