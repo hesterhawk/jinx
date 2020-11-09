@@ -26,7 +26,7 @@ class Engine:
 class Sniffer(Engine):
 
   def __init__(self, patterns):
-      self.patterns = pattern.split(";")
+      self.patterns = patterns.split(";")
 
   def validate(self, data):
 
