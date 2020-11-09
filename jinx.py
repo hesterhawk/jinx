@@ -30,14 +30,14 @@ class Patterns(Engine):
 
       opcode = ' '.join(item[2:])
 
-      for cnt in range(0, len(patterns)):
+      for cnt in range(0, len(self.patterns)):
 
         if 0 == cnt:
-          if opcode == patterns[cnt]:
-            r.append(patterns[cnt])
+          if opcode == self.patterns[cnt]:
+            r.append(self.patterns[cnt])
         else:
-          if opcode == patterns[cnt] and patterns[cnt - 1] in r:
-            r.append(patterns[cnt])
+          if opcode == self.patterns[cnt] and self.patterns[cnt - 1] in r:
+            r.append(self.patterns[cnt])
 
     if len(r) > 0:
 
@@ -155,7 +155,8 @@ class Jinx(gdb.Command):
     elif args[0] not in Route.engines:
 
       self.engine = Patterns()
-      self.setPatterns(args[0])
+      self.engine.setPatterns(args[0])
+      print("[+] search pattern: {}".format(args[0]))
       self.run_search()
 
     else:
